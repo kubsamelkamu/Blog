@@ -24,7 +24,7 @@ function Header() {
                     </button>
 
                 <nav className={`lg:flex lg:space-x-3 ${isMenuOpen ? 'block' : 'hidden'} lg:block`}>
-                    <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y- lg:space-x-3">
+                    <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-3">
                         <li>
                             <a href="#" className="hover:text-gray-500">Home</a>
                         </li>
@@ -41,7 +41,6 @@ function Header() {
                 </nav>
                 </div>
                 
-            
                 <button 
                     onClick={toggleTheme}
                     aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
