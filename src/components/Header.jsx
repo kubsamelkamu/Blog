@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTheme } from '../contexts/useTheme';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
 
-const Header = () => {
+function Header() {
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -24,18 +24,18 @@ const Header = () => {
                     </button>
 
                 <nav className={`lg:flex lg:space-x-3 ${isMenuOpen ? 'block' : 'hidden'} lg:block`}>
-                    <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-3">
+                    <ul className="flex flex-col lg:flex-row space-y-4 lg:space-y- lg:space-x-3">
                         <li>
-                            <a href="#" className="hover:text-gray-300">Home</a>
+                            <a href="#" className="hover:text-gray-500">Home</a>
                         </li>
                         <li>
-                            <a href="#" className="hover:text-gray-300">About</a>
+                            <a href="#" className="hover:text-gray-500">About</a>
                         </li>
                         <li>
-                            <a href="#" className="hover:text-gray-300">Contact</a>
+                            <a href="#" className="hover:text-gray-500">Contact</a>
                         </li>
                         <li>
-                            <a href="#" className="hover:text-gray-300">Posts</a>
+                            <a href="#" className="hover:text-gray-500">Posts</a>
                         </li>
                     </ul>
                 </nav>
