@@ -41,7 +41,7 @@ function Register() {
       await sendEmailVerification(userCredential.user);
       setSuccess('Registration successful! Please check your email to verify your account.');
       
-      setTimeout(() => navigate('/login'), 5000); 
+      setTimeout(() => navigate('/signin'), 5000); 
     } catch (err) {
       const errorCode = err.code;
       switch (errorCode) {
