@@ -6,6 +6,7 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Home from "./pages/Home";
 import Profile from "./pages/user/Profile";
+import NotFound from "./pages/NotFound";
 import { ThemeProvider } from "./contexts/themecontext";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/edit-post/:id" element={<EditPost />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="*" element={<NotFound />} />  
             </Routes>
           </main>
           <Footer/>
