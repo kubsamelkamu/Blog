@@ -6,8 +6,8 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Home from "./pages/Home";
 import Profile from "./pages/user/Profile";
-import SignIn from "./components/auth/SignIn";
-import SignUp from "./components/auth/SignOut";
+import Register from "./components/auth/SignUp";
+import Login from "./components/auth/SignIn";
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/privateComponent";
 import { AuthProvider } from "./contexts/services/Authservice";
@@ -23,8 +23,8 @@ function App() {
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<Login />} />
+                <Route path="/signup" element={<Register/>} />
                 <Route
                   path="/profile"
                   element={
