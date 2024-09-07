@@ -113,7 +113,11 @@ function Login() {
         >
           {googleLogin ? 'Signing In with Google...' : 'Sign In with Google'}
         </button>
+        <div className="mt-4 text-center">
+          <p>Do not have an account? <a href="/signup" className="text-blue-500">sign up</a></p>
+        </div>
       </div>
+     
     </div>
   );
 }
