@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { auth } from '../../contexts/services/FirebaseService';
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const[emailLogin,setEmailLogin] = useState(false);
-  const[googleLogin,setGoogleLogin] = useState(false);
+  const [emailLogin, setEmailLogin] = useState(false);
+  const [googleLogin, setGoogleLogin] = useState(false);
   const [error, setError] = useState(null);
+  const [resetEmailSent, setResetEmailSent] = useState(false);
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
@@ -69,9 +70,26 @@ function Login() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError('Please enter your email to reset the password.');
+      return;
+    }
+
+    try {
+      setError(null);
+      await sendPasswordResetEmail(auth, email);
+      setResetEmailSent(true);
+    } catch (err) {
+      setError(err)
+      setError('Failed to send password reset email. Please try again.');
+      setResetEmailSent(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center ">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md border-2 border-blue-500 ">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="bg-white p-8 rounded shadow-md w-full max-w-md border-2 border-blue-500">
         <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
         <form onSubmit={handleSignIn}>
           <div className="flex flex-col mb-4">
@@ -113,11 +131,22 @@ function Login() {
         >
           {googleLogin ? 'Signing In with Google...' : 'Sign In with Google'}
         </button>
+
         <div className="mt-4 text-center">
-          <p>Do not have an account? <a href="/signup" className="text-blue-500">sign up</a></p>
+          <button
+            onClick={handleForgotPassword}
+            className="text-blue-500 hover:underline"
+          >
+            Forgot Password?
+          </button>
+        </div>
+
+        {resetEmailSent && <p className="mt-4 text-green-600">Password reset email sent!</p>}
+
+        <div className="mt-4 text-center">
+          <p>Do not have an account? <a href="/signup" className="text-blue-500">Sign up</a></p>
         </div>
       </div>
-     
     </div>
   );
 }
