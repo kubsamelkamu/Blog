@@ -5,13 +5,15 @@ import Blog from "./pages/Blog";
 import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Home from "./pages/Home";
-import Profile from "./pages/user/Profile";
+import ProfileManagement from "./pages/user/Profile";
 import Register from "./components/auth/SignUp";
 import Login from "./components/auth/SignIn";
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/privateComponent";
 import { AuthProvider } from "./contexts/services/Authservice";
 import { ThemeProvider } from "./contexts/themecontext";
+import { ToastContainer } from 'react-toastify';  
+import 'react-toastify/dist/ReactToastify.css';  
 
 function App() {
   return (
@@ -29,7 +31,7 @@ function App() {
                   path="/profile"
                   element={
                     <PrivateRoute>
-                      <Profile />
+                      <ProfileManagement />
                     </PrivateRoute>
                   }
                 />
@@ -55,6 +57,18 @@ function App() {
             </main>
             <Footer />
           </div>
+          <ToastContainer 
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
         </AuthProvider>
       </ThemeProvider>
     </Router>
