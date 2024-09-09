@@ -11,6 +11,10 @@ function CreatePost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  
+  const contentCharLimit = 2000;
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -21,7 +25,6 @@ function CreatePost() {
   }, []);
 
   useEffect(() => {
-    
     const draftTitle = localStorage.getItem('draftTitle');
     const draftContent = localStorage.getItem('draftContent');
     if (draftTitle) setTitle(draftTitle);
@@ -32,6 +35,16 @@ function CreatePost() {
     localStorage.setItem('draftTitle', title);
     localStorage.setItem('draftContent', content);
     toast.info('Draft saved successfully!');
+  };
+
+
+  const handleContentChange = (value) => {
+    setContent(value);
+    const text = value.replace(/<\/?[^>]+(>|$)/g, '').trim();
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+
+    setWordCount(words.length);
+    setCharCount(text.length);
   };
 
   const handleSubmit = async (e) => {
@@ -45,11 +58,18 @@ function CreatePost() {
     }
 
     if (title.trim().length < 5) {
-      toast.success('Title must be at least 5 characters long.');
+      toast.error('Title must be at least 5 characters long.');
+      setLoading(false);
       return;
     }
     if (content.trim().length < 20) {
       toast.error('Content must be at least 20 characters long.');
+      setLoading(false);
+      return;
+    }
+    if (charCount > contentCharLimit) {
+      toast.error(`Content must be less than ${contentCharLimit} characters.`);
+      setLoading(false);
       return;
     }
 
@@ -97,10 +117,14 @@ function CreatePost() {
           <ReactQuill
             theme="snow"
             value={content}  
-            onChange={setContent}  
+            onChange={handleContentChange}  
             className="bg-white"
             placeholder="Write your post content here..."
           />
+          <div className="flex justify-between text-gray-500 text-sm mt-2">
+            <p>Word Count: {wordCount}</p>
+            <p>{charCount}/{contentCharLimit} characters</p>
+          </div>
         </div>
         <button
           type="button"
