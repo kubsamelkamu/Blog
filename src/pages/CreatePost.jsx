@@ -20,6 +20,20 @@ function CreatePost() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    
+    const draftTitle = localStorage.getItem('draftTitle');
+    const draftContent = localStorage.getItem('draftContent');
+    if (draftTitle) setTitle(draftTitle);
+    if (draftContent) setContent(draftContent);
+  }, []);
+
+  const handleSaveDraft = () => {
+    localStorage.setItem('draftTitle', title);
+    localStorage.setItem('draftContent', content);
+    toast.info('Draft saved successfully!');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -38,7 +52,6 @@ function CreatePost() {
       toast.error('Content must be at least 20 characters long.');
       return;
     }
-    
 
     try {
       await createPost({
@@ -55,6 +68,8 @@ function CreatePost() {
       toast.success('Post created successfully!');
       setTitle('');
       setContent('');
+      localStorage.removeItem('draftTitle');
+      localStorage.removeItem('draftContent');
     } catch (err) {
       toast.error('Failed to create post: ' + err.message);
     } finally {
@@ -87,6 +102,13 @@ function CreatePost() {
             placeholder="Write your post content here..."
           />
         </div>
+        <button
+          type="button"
+          onClick={handleSaveDraft}
+          className="w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 mb-2"
+        >
+          Save Draft
+        </button>
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
