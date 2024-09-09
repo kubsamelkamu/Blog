@@ -3,6 +3,8 @@ import { createPost } from '../contexts/services/PostService';
 import { auth } from '../contexts/services/FirebaseService';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; 
 
 function CreatePost() {
   const [user, setUser] = useState(null);
