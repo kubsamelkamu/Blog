@@ -28,6 +28,16 @@ function CreatePost() {
       return;
     }
 
+    if (title.trim().length < 5) {
+      toast.success('Title must be at least 5 characters long.');
+      return;
+    }
+    if (content.trim().length < 20) {
+      toast.error('Content must be at least 20 characters long.');
+      return;
+    }
+    
+
     try {
       await createPost({
         title,
