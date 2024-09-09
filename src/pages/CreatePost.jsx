@@ -9,6 +9,7 @@ function CreatePost() {
   const [content, setContent] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const[loading, setLoading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -24,9 +25,11 @@ function CreatePost() {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true);
 
     if (!title || !content) {
       setError('All required fields must be filled');
+      setLoading(false);
       return;
     }
 
@@ -56,6 +59,8 @@ function CreatePost() {
       setContent('');
     } catch (err) {
       setError('Failed to create post: ' + err.message);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -87,10 +92,11 @@ function CreatePost() {
           />
         </div>
         <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-        >
-          Create Post
+            type="submit"
+            className={`w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 ${loading && 'opacity-50 cursor-not-allowed'}`}
+            disabled={loading}
+          >
+            {loading ? 'Creating...' : 'Create Post'}
         </button>
       </form>
     </div>
