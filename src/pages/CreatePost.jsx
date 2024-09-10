@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import ReactMarkdown from 'react-markdown';
+import { ClipLoader } from 'react-spinners'; // Import spinner
 
 function CreatePost() {
   const [user, setUser] = useState(null);
@@ -14,8 +15,7 @@ function CreatePost() {
   const [loading, setLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
-  const [isMarkdown, setIsMarkdown] = useState(false); // To toggle Markdown support
-  
+  const [isMarkdown, setIsMarkdown] = useState(false); // Toggle for Markdown
   const contentCharLimit = 2000;
 
   useEffect(() => {
@@ -44,7 +44,6 @@ function CreatePost() {
     setContent(value);
     const text = isMarkdown ? value : value.replace(/<\/?[^>]+(>|$)/g, '').trim();
     const words = text.split(/\s+/).filter(word => word.length > 0);
-
     setWordCount(words.length);
     setCharCount(text.length);
   };
@@ -79,7 +78,7 @@ function CreatePost() {
       await createPost({
         title,
         content,
-        format: isMarkdown ? 'markdown' : 'html', 
+        format: isMarkdown ? 'markdown' : 'html',
         commentsCount: 0,
         likes: 0,
         author: {
@@ -115,16 +114,16 @@ function CreatePost() {
             placeholder="Enter post title"
           />
         </div>
-        
+
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="content">Post Content</label>
           <div className="mb-2">
-            <button 
-              type="button" 
-              onClick={() => setIsMarkdown(!isMarkdown)} 
+            <button
+              type="button"
+              onClick={() => setIsMarkdown(!isMarkdown)}
               className="bg-gray-300 px-3 py-1 rounded-md text-sm"
             >
-              {isMarkdown ? "Switch to Rich Text" : "Switch to Markdown"}
+              {isMarkdown ? 'Switch to Rich Text' : 'Switch to Markdown'}
             </button>
           </div>
 
@@ -138,8 +137,8 @@ function CreatePost() {
           ) : (
             <ReactQuill
               theme="snow"
-              value={content}  
-              onChange={handleContentChange}  
+              value={content}
+              onChange={handleContentChange}
               className="bg-white"
               placeholder="Write your post content here..."
             />
@@ -165,12 +164,15 @@ function CreatePost() {
         >
           Save Draft
         </button>
+        
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
           disabled={loading}
         >
-          {loading ? 'Creating...' : 'Create Post'}
+          {loading ? (
+            <ClipLoader size={20} color={"#fff"} />
+          ) : 'Create Post'}
         </button>
       </form>
     </div>
