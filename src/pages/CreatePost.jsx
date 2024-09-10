@@ -100,81 +100,84 @@ function CreatePost() {
   };
 
   return (
-    <div className={`max-w-lg mx-auto p-4 rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
-      <h2 className="text-2xl font-semibold mb-4">Create a New Post</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block mb-2" htmlFor="title">Post Title</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className={`w-full px-3 py-2 border rounded-lg ${theme === 'dark' ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white'}`}
-            placeholder="Enter post title"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label className="block mb-2" htmlFor="content">Post Content</label>
-          <div className="mb-2">
-            <button
-              type="button"
-              onClick={() => setIsMarkdown(!isMarkdown)}
-              className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
-            >
-              {isMarkdown ? 'Switch to Rich Text' : 'Switch to Markdown'}
-            </button>
+    <div className={`w-full min-h-screen p-4 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <div className={`max-w-4xl mx-auto p-6 rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+     
+        <h2 className="text-2xl font-semibold mb-4">Create a New Post</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block mb-2 font-medium" htmlFor="title">Post Title</label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg ${theme === 'dark' ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white'}`}
+              placeholder="Enter post title"
+            />
           </div>
 
-          {isMarkdown ? (
-            <textarea
-              value={content}
-              onChange={(e) => handleContentChange(e.target.value)}
-              className={`w-full h-40 p-2 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
-              placeholder="Write your post content in Markdown..."
-            />
-          ) : (
-            <ReactQuill
-              theme="snow"
-              value={content}
-              onChange={handleContentChange}
-              className={`bg-white ${theme === 'dark' && 'text-black'}`}
-              placeholder="Write your post content here..."
-            />
-          )}
-
-          <div className="flex justify-between text-sm mt-2">
-            <p>Word Count: {wordCount}</p>
-            <p>{charCount}/{contentCharLimit} characters</p>
-          </div>
-
-          {isMarkdown && (
-            <div className={`mt-4 p-4 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-100'}`}>
-              <h3 className="text-lg font-semibold mb-2">Markdown Preview:</h3>
-              <ReactMarkdown>{content}</ReactMarkdown>
+          <div className="mb-4">
+            <label className="block mb-2 font-medium" htmlFor="content">Post Content</label>
+            <div className="mb-2">
+              <button
+                type="button"
+                onClick={() => setIsMarkdown(!isMarkdown)}
+                className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
+              >
+                {isMarkdown ? 'Switch to Rich Text' : 'Switch to Markdown'}
+              </button>
             </div>
-          )}
-        </div>
 
-        <button
-          type="button"
-          onClick={handleSaveDraft}
-          className={`w-full py-2 rounded-lg mb-2 ${theme === 'dark' ? 'bg-gray-600 hover:bg-gray-700' : 'bg-gray-500 hover:bg-gray-600'} text-white`}
-        >
-          Save Draft
-        </button>
-        
-        <button
-          type="submit"
-          className={`w-full py-2 rounded-lg ${loading ? 'opacity-75 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-          disabled={loading}
-        >
-          {loading ? (
-            <ClipLoader size={20} color={"#fff"} />
-          ) : 'Create Post'}
-        </button>
-      </form>
+            {isMarkdown ? (
+              <textarea
+                value={content}
+                onChange={(e) => handleContentChange(e.target.value)}
+                className={`w-full h-40 p-2 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                placeholder="Write your post content in Markdown..."
+              />
+            ) : (
+              <ReactQuill
+                theme="snow"
+                value={content}
+                onChange={handleContentChange}
+                className={`bg-white ${theme === 'dark' && 'text-black'}`}
+                placeholder="Write your post content here..."
+              />
+            )}
+
+            <div className="flex justify-between text-gray-500 text-sm mt-2">
+              <p>Word Count: {wordCount}</p>
+              <p>{charCount}/{contentCharLimit} characters</p>
+            </div>
+
+            {isMarkdown && (
+              <div className={`mt-4 p-4 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+                <h3 className="text-lg font-semibold mb-2">Markdown Preview:</h3>
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSaveDraft}
+            className={`w-full py-2 rounded-lg mb-2 ${theme === 'dark' ? 'bg-gray-600 hover:bg-gray-700' : 'bg-gray-500 hover:bg-gray-600'} text-white`}
+          >
+            Save Draft
+          </button>
+          
+          <button
+            type="submit"
+            className={`w-full py-2 rounded-lg ${loading ? 'opacity-75 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+            disabled={loading}
+          >
+            {loading ? (
+              <ClipLoader size={20} color={"#fff"} />
+            ) : 'Create Post'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
