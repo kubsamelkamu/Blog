@@ -1,11 +1,12 @@
 import { useTheme } from '../contexts/useTheme';
+import { Link } from 'react-router-dom';  // Import Link
 import { FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa'; 
 
 function Footer(){
     const { theme } = useTheme(); 
 
     return (
-        <footer className={`p-6 ${theme === 'light' ? 'bg-gray-100 text-black' : 'bg-gray-800 text-white'} transition-colors duration-300`}>
+        <footer className={`p-6 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'} transition-colors duration-400`}>
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 
                 <div>
@@ -17,7 +18,12 @@ function Footer(){
                 <div>
                     <h3 className="font-bold text-lg mb-2">Quick Links</h3>
                     <ul>
-                        <li><a href="#" className="hover:text-gray-500">Home</a></li>
+                        <li>
+                            <Link to="/" className="hover:text-gray-300">Home</Link>
+                        </li>
+                        <li>
+                            <Link to="/profile" className="hover:text-gray-300">Profile</Link>
+                        </li>
                         <li><a href="#" className="hover:text-gray-500">About</a></li>
                         <li><a href="#" className="hover:text-gray-500">Contact</a></li>
                         <li><a href="#" className="hover:text-gray-500">Posts</a></li>
