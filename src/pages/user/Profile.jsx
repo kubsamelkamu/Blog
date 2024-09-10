@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { auth, storage } from '../../contexts/services/FirebaseService';
 import { updateProfile } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useTheme } from '../../contexts/useTheme';
 
 function ProfileManagement() {
+  const {theme} = useTheme();
   const user = auth.currentUser;
   const [displayName, setDisplayName] = useState(user.displayName || '');
   const [email, setEmail] = useState(user.email || '');
@@ -59,8 +61,8 @@ function ProfileManagement() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <div className={`w-full min-h-screen p-4 ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
+      <div className={`max-w-4xl mx-auto p-6 rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
         <h2 className="text-2xl font-bold mb-6 text-center">Profile Management</h2>
 
         {success && <p className="text-green-500 mb-4">{success}</p>}
@@ -92,7 +94,7 @@ function ProfileManagement() {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             disabled={!editing}
-            className="border p-2 rounded w-full"
+            className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
             aria-label="Display Name"
           />
         </div>
@@ -105,7 +107,7 @@ function ProfileManagement() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={!editing}
-            className="border p-2 rounded w-full"
+            className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
             aria-label="Email"
           />
         </div>
@@ -122,7 +124,7 @@ function ProfileManagement() {
               </button>
               <button
                 onClick={handleEditToggle}
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
               >
                 Cancel
               </button>
@@ -130,7 +132,7 @@ function ProfileManagement() {
           ) : (
             <button
               onClick={handleEditToggle}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
             >
               Edit Profile
             </button>
