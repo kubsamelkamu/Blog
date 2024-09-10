@@ -6,28 +6,28 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
 import ReactMarkdown from 'react-markdown';
-import { ClipLoader } from 'react-spinners'; // Import spinner
+import { ClipLoader } from 'react-spinners'; 
+import { useTheme } from '../contexts/useTheme';
 
 function CreatePost() {
+  const { theme } = useTheme(); 
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
-  const [isMarkdown, setIsMarkdown] = useState(false); // Toggle for Markdown
+  const [isMarkdown, setIsMarkdown] = useState(false); 
   const contentCharLimit = 2000;
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       setUser(currentUser);
     });
-
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    // Load draft from localStorage
     const draftTitle = localStorage.getItem('draftTitle');
     const draftContent = localStorage.getItem('draftContent');
     if (draftTitle) setTitle(draftTitle);
@@ -100,28 +100,28 @@ function CreatePost() {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4 bg-white rounded-lg shadow-md">
+    <div className={`max-w-lg mx-auto p-4 rounded-lg shadow-md ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'}`}>
       <h2 className="text-2xl font-semibold mb-4">Create a New Post</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="title">Post Title</label>
+          <label className="block mb-2" htmlFor="title">Post Title</label>
           <input
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            className={`w-full px-3 py-2 border rounded-lg ${theme === 'dark' ? 'border-gray-600 bg-gray-700' : 'border-gray-300 bg-white'}`}
             placeholder="Enter post title"
           />
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="content">Post Content</label>
+          <label className="block mb-2" htmlFor="content">Post Content</label>
           <div className="mb-2">
             <button
               type="button"
               onClick={() => setIsMarkdown(!isMarkdown)}
-              className="bg-gray-300 px-3 py-1 rounded-md text-sm"
+              className={`px-3 py-1 rounded-md text-sm ${theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-300'}`}
             >
               {isMarkdown ? 'Switch to Rich Text' : 'Switch to Markdown'}
             </button>
@@ -131,7 +131,7 @@ function CreatePost() {
             <textarea
               value={content}
               onChange={(e) => handleContentChange(e.target.value)}
-              className="w-full h-40 p-2 border border-gray-300 rounded-lg"
+              className={`w-full h-40 p-2 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
               placeholder="Write your post content in Markdown..."
             />
           ) : (
@@ -139,18 +139,18 @@ function CreatePost() {
               theme="snow"
               value={content}
               onChange={handleContentChange}
-              className="bg-white"
+              className={`bg-white ${theme === 'dark' && 'text-black'}`}
               placeholder="Write your post content here..."
             />
           )}
 
-          <div className="flex justify-between text-gray-500 text-sm mt-2">
+          <div className="flex justify-between text-sm mt-2">
             <p>Word Count: {wordCount}</p>
             <p>{charCount}/{contentCharLimit} characters</p>
           </div>
 
           {isMarkdown && (
-            <div className="mt-4 p-4 border border-gray-300 rounded-lg">
+            <div className={`mt-4 p-4 border rounded-lg ${theme === 'dark' ? 'bg-gray-700 border-gray-600' : 'bg-gray-100'}`}>
               <h3 className="text-lg font-semibold mb-2">Markdown Preview:</h3>
               <ReactMarkdown>{content}</ReactMarkdown>
             </div>
@@ -160,14 +160,14 @@ function CreatePost() {
         <button
           type="button"
           onClick={handleSaveDraft}
-          className="w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 mb-2"
+          className={`w-full py-2 rounded-lg mb-2 ${theme === 'dark' ? 'bg-gray-600 hover:bg-gray-700' : 'bg-gray-500 hover:bg-gray-600'} text-white`}
         >
           Save Draft
         </button>
         
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+          className={`w-full py-2 rounded-lg ${loading ? 'opacity-75 cursor-not-allowed' : ''} ${theme === 'dark' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
           disabled={loading}
         >
           {loading ? (
