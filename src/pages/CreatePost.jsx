@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; 
+import ReactMarkdown from 'react-markdown';
 
 function CreatePost() {
   const [user, setUser] = useState(null);
@@ -13,6 +14,7 @@ function CreatePost() {
   const [loading, setLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
+  const [isMarkdown, setIsMarkdown] = useState(false); // To toggle Markdown support
   
   const contentCharLimit = 2000;
 
@@ -25,6 +27,7 @@ function CreatePost() {
   }, []);
 
   useEffect(() => {
+    // Load draft from localStorage
     const draftTitle = localStorage.getItem('draftTitle');
     const draftContent = localStorage.getItem('draftContent');
     if (draftTitle) setTitle(draftTitle);
@@ -37,10 +40,9 @@ function CreatePost() {
     toast.info('Draft saved successfully!');
   };
 
-
   const handleContentChange = (value) => {
     setContent(value);
-    const text = value.replace(/<\/?[^>]+(>|$)/g, '').trim();
+    const text = isMarkdown ? value : value.replace(/<\/?[^>]+(>|$)/g, '').trim();
     const words = text.split(/\s+/).filter(word => word.length > 0);
 
     setWordCount(words.length);
@@ -77,6 +79,7 @@ function CreatePost() {
       await createPost({
         title,
         content,
+        format: isMarkdown ? 'markdown' : 'html', 
         commentsCount: 0,
         likes: 0,
         author: {
@@ -112,20 +115,49 @@ function CreatePost() {
             placeholder="Enter post title"
           />
         </div>
+        
         <div className="mb-4">
           <label className="block text-gray-700 mb-2" htmlFor="content">Post Content</label>
-          <ReactQuill
-            theme="snow"
-            value={content}  
-            onChange={handleContentChange}  
-            className="bg-white"
-            placeholder="Write your post content here..."
-          />
+          <div className="mb-2">
+            <button 
+              type="button" 
+              onClick={() => setIsMarkdown(!isMarkdown)} 
+              className="bg-gray-300 px-3 py-1 rounded-md text-sm"
+            >
+              {isMarkdown ? "Switch to Rich Text" : "Switch to Markdown"}
+            </button>
+          </div>
+
+          {isMarkdown ? (
+            <textarea
+              value={content}
+              onChange={(e) => handleContentChange(e.target.value)}
+              className="w-full h-40 p-2 border border-gray-300 rounded-lg"
+              placeholder="Write your post content in Markdown..."
+            />
+          ) : (
+            <ReactQuill
+              theme="snow"
+              value={content}  
+              onChange={handleContentChange}  
+              className="bg-white"
+              placeholder="Write your post content here..."
+            />
+          )}
+
           <div className="flex justify-between text-gray-500 text-sm mt-2">
             <p>Word Count: {wordCount}</p>
             <p>{charCount}/{contentCharLimit} characters</p>
           </div>
+
+          {isMarkdown && (
+            <div className="mt-4 p-4 border border-gray-300 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">Markdown Preview:</h3>
+              <ReactMarkdown>{content}</ReactMarkdown>
+            </div>
+          )}
         </div>
+
         <button
           type="button"
           onClick={handleSaveDraft}
