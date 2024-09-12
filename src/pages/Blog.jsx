@@ -10,8 +10,14 @@ function Blog() {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1); 
   const [hasMore, setHasMore] = useState(true); 
-  const [searchTerm, setSearchTerm] = useState(""); 
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [expandedPosts, setExpandedPosts] = useState(new Set()); 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const stripHtmlTags = (html) => {
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -35,18 +41,11 @@ function Blog() {
     fetchPosts();
   }, [page]); 
 
-  useEffect(() => {
-    const filterResults = posts.filter((post) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredPosts(filterResults);
-  }, [searchTerm, posts]); 
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop !==
-        document.documentElement.offsetHeight || loading
+  useEffect(() => { 
+    const handleScroll = () => {  
+      if (   
+        window.innerHeight + document.documentElement.scrollTop !==  
+        document.documentElement.offsetHeight || loading  
       ) {
         return;
       }
@@ -60,70 +59,77 @@ function Blog() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [loading, hasMore]);
-
-  const stripHtmlTags = (html) => {
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
+  
+  const handleReadMoreClick = (postId) => {
+    setExpandedPosts((prevExpanded) => {
+      const newExpanded = new Set(prevExpanded);
+      if (newExpanded.has(postId)) {
+        newExpanded.delete(postId);
+      } else {
+        newExpanded.add(postId);
+      }
+      return newExpanded;
+    });
   };
+
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (post.excerpt && stripHtmlTags(post.excerpt).toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (post.content && stripHtmlTags(post.content).toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   return (
     <div className={`blog-page px-6 py-10 ${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"}`}>
-      <div className="flex justify-center mb-6">
-        <input
-          type="text"
-          placeholder="Search posts by title..."
-          className={`w-full max-w-md px-4 py-2 border rounded-lg ${
-            theme === "dark" ? "bg-gray-800 border-gray-700 text-white" : "bg-white border-gray-300 text-gray-900"
-          }`}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)} 
-        />
-      </div>
-
       {error && (
         <p className="text-red-500 text-center">Failed to load posts. Please try again later.</p>
       )}
-
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Search posts..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className={`w-full px-4 py-2 rounded border ${theme === "dark" ? "bg-gray-700 text-white border-gray-600" : "bg-gray-100 text-gray-900 border-gray-300"}`}
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => (
-            <div
-              className={`post-card border rounded-lg shadow-lg p-6 transition-transform transform hover:scale-105 duration-300 ${
-                theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"
+        {filteredPosts.map((post) => (
+          <div
+            className={`post-card border rounded-lg shadow-lg p-6 transition-transform transform hover:scale-105 duration-300 ${
+              theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"
+            }`}
+            key={post.id}
+          >
+            <h3 className={`text-2xl font-semibold ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
+              {post.title}
+            </h3>
+            <p className={`mt-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+              {post.excerpt
+                ? stripHtmlTags(post.excerpt)
+                : stripHtmlTags(post.content).slice(0, 100) + "..."}
+            </p>
+            {expandedPosts.has(post.id) && (
+              <div className={`mt-4 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
+                <p>{stripHtmlTags(post.content)}</p>
+              </div>
+            )}
+            <small className={`block mt-4 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+              By {post.author.displayName} on{" "}
+              {new Date(post.createdAt).toLocaleDateString()}
+            </small>
+            <p className={`mt-2 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+              {post.commentsCount} Comments, {post.likes} Likes
+            </p>
+            <button
+              className={`mt-6 px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 ${
+                theme === "dark" ? "bg-blue-500 text-white" : "bg-blue-500 text-white"
               }`}
-              key={post.id}
+              onClick={() => handleReadMoreClick(post.id)}
             >
-              <h3 className={`text-2xl font-semibold ${theme === "dark" ? "text-white" : "text-gray-800"}`}>
-                {post.title}
-              </h3>
-              <p className={`mt-2 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}>
-                {post.excerpt
-                  ? stripHtmlTags(post.excerpt)
-                  : post.content
-                  ? stripHtmlTags(post.content).slice(0, 100) + "..."
-                  : "No description available."}
-              </p>
-              <small className={`block mt-4 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
-                By {post.author.displayName} on{" "}
-                {new Date(post.createdAt).toLocaleDateString()}
-              </small>
-              <p className={`mt-2 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
-                {post.commentsCount} Comments, {post.likes} Likes
-              </p>
-              <button
-                className={`mt-6 px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 ${
-                  theme === "dark" ? "bg-blue-500 text-white" : "bg-blue-500 text-white"
-                }`}
-                onClick={() => console.log("Read More")}
-              >
-                Read More
-              </button>
-            </div>
-          ))
-        ) : (
-          <p className="text-center col-span-full">No posts found.</p>
-        )}
+              {expandedPosts.has(post.id) ? "Show Less" : "Read More"}
+            </button>
+          </div>
+        ))}
       </div>
 
       {loading && <div className="flex justify-center items-center py-10"><ClipLoader /></div>}
