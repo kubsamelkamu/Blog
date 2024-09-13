@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link
+import { Link } from 'react-router-dom';  
 import { useTheme } from '../contexts/useTheme';
 import { FaSun, FaMoon, FaBars, FaTimes } from 'react-icons/fa';
 
@@ -31,11 +31,15 @@ function Header() {
                             <Link to="/" className="hover:text-gray-300">Home</Link>
                         </li>
                         <li>
-                            <Link to="/blog" className="hover:text-gray-300">Blog</Link>
+                            <Link to="/posts" className="hover:text-gray-300">Blog</Link>
+                        </li>
+                        <li>
+                            <Link to="/create-post" className="hover:text-gray-300">Createpost</Link>
                         </li>
                         <li>
                             <Link to="/profile" className="hover:text-gray-300">Profile</Link>
                         </li>
+                        
                     </ul>
                 </nav>
 
