@@ -30,7 +30,7 @@ function Blog() {
           );
           return [...prevPosts, ...newPosts];
         });
-        setHasMore(fetchedPosts.length > 0);
+        setHasMore(fetchedPosts.length > 0);   
       } catch (error) {
         setError(error);
       } finally {
@@ -39,17 +39,13 @@ function Blog() {
     };
 
     fetchPosts();
-  }, [page]); 
+  }, [page]);
 
   useEffect(() => { 
     const handleScroll = () => {  
-      if (   
-        window.innerHeight + document.documentElement.scrollTop !==  
-        document.documentElement.offsetHeight || loading  
-      ) {
+      if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || loading) {
         return;
       }
-
       if (hasMore) {
         setPage((prevPage) => prevPage + 1); 
       }
@@ -71,6 +67,7 @@ function Blog() {
       return newExpanded;
     });
   };
+
 
   const filteredPosts = posts.filter(post =>
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,23 +114,21 @@ function Blog() {
               By {post.author.displayName} on{" "}
               {new Date(post.createdAt).toLocaleDateString()}
             </small>
-            <p className={`mt-2 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
-              {post.commentsCount} Comments, {post.likes} Likes
-            </p>
+
             <button
-              className={`mt-6 px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-300 ${
-                theme === "dark" ? "bg-blue-500 text-white" : "bg-blue-500 text-white"
-              }`}
+              className="mt-4 text-blue-500 hover:text-blue-700"
               onClick={() => handleReadMoreClick(post.id)}
             >
-              {expandedPosts.has(post.id) ? "Show Less" : "Read More"}
+              {expandedPosts.has(post.id) ? "Read Less" : "Read More"}
             </button>
           </div>
         ))}
       </div>
-
-      {loading && <div className="flex justify-center items-center py-10"><ClipLoader /></div>}
-      {!hasMore && !loading && <p className="text-center text-gray-500">No more posts to load.</p>}
+      {loading && (
+        <div className="flex justify-center">
+          <ClipLoader size={50} color="#3498db" />
+        </div>
+      )}
     </div>
   );
 }
