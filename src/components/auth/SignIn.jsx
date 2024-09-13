@@ -61,7 +61,7 @@ function Login() {
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
-      navigate('/home');
+      navigate('/blog');
     } catch (err) {
       setError(err);
       setError('Google sign-in failed. Please try again.');
