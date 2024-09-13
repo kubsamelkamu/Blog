@@ -1,6 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/services/useAuth';
 
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good Morning';
+  if (hour < 18) return 'Good Afternoon';
+  return 'Good Evening';
+};
+
 const Home = () => {
   const { currentUser } = useAuth();  
   const navigate = useNavigate();
@@ -16,7 +23,7 @@ const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center bg-gradient-to-br from-pink-400 to-indigo-500">
       <h1 className="text-4xl font-bold text-white mb-4 animate-fade-in">
-        {currentUser ? `Welcome back, ${currentUser.displayName || 'User'}!` : 'Welcome to Our Blog!'}
+        {currentUser ? `${getGreeting()}, ${currentUser.displayName || 'User'}!` : 'Welcome to Our Blog!'}
       </h1>
 
       <p className="text-lg text-white mb-6 animate-fade-in delay-150">
@@ -32,5 +39,6 @@ const Home = () => {
     </div>
   );
 };
+
 
 export default Home;
