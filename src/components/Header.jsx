@@ -31,7 +31,7 @@ function Header() {
                             <Link to="/" className="hover:text-gray-300">Home</Link>
                         </li>
                         <li>
-                            <Link to="/posts" className="hover:text-gray-300">Blog</Link>
+                            <Link to="/blog" className="hover:text-gray-300">Posts</Link>
                         </li>
                         <li>
                             <Link to="/create-post" className="hover:text-gray-300">Createpost</Link>
