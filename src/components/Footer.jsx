@@ -1,5 +1,5 @@
 import { useTheme } from '../contexts/useTheme';
-import { Link } from 'react-router-dom';  // Import Link
+import { Link } from 'react-router-dom'; 
 import { FaInstagram, FaGithub, FaLinkedin } from 'react-icons/fa'; 
 
 function Footer(){
@@ -24,20 +24,16 @@ function Footer(){
                         <li>
                             <Link to="/profile" className="hover:text-gray-300">Profile</Link>
                         </li>
-                        <li><a href="#" className="hover:text-gray-500">About</a></li>
-                        <li><a href="#" className="hover:text-gray-500">Contact</a></li>
-                        <li><a href="#" className="hover:text-gray-500">Posts</a></li>
-                        <li><a href="#" className="hover:text-gray-500">Privacy Policy</a></li>
-                        <li><a href="#" className="hover:text-gray-500">Terms of Service</a></li>
+                        <li><a href="/blog" className="hover:text-gray-500">Posts</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h3 className="font-bold text-lg mb-2">Follow Us</h3>
                     <div className="flex space-x-4">
-                        <a href="https://twitter.com" aria-label="Twitter" className="hover:text-gray-500"><FaInstagram size={24} /></a>
-                        <a href="https://github.com" aria-label="GitHub" className="hover:text-gray-500"><FaGithub size={24} /></a>
-                        <a href="https://linkedin.com" aria-label="LinkedIn" className="hover:text-gray-500"><FaLinkedin size={24} /></a>
+                        <a href="https://instagram.com/kubsa58" aria-label="Instagram" className="hover:text-gray-500"><FaInstagram size={24} /></a>
+                        <a href="https://github.com/kubsamelkamu"aria-label="GitHub" className="hover:text-gray-500"><FaGithub size={24} /></a>
+                        <a href="https://linkedin.com/in/kubsa-melkamu-519bb5263"aria-label="LinkedIn" className="hover:text-gray-500"><FaLinkedin size={24} /></a>
                     </div>
                 </div>
             </div>
