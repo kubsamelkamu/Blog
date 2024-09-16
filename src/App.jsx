@@ -8,10 +8,10 @@ import Home from "./pages/Home";
 import ProfileManagement from "./pages/user/Profile";
 import Register from "./components/auth/SignUp";
 import Login from "./components/auth/SignIn";
-import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";      
 import PrivateRoute from "./components/privateComponent";
 import { AuthProvider } from "./contexts/services/Authservice";
-import { ThemeProvider } from "./contexts/themecontext";
+import ThemeProvider from "./contexts/themecontext";
 import { ToastContainer } from 'react-toastify';  
 import 'react-toastify/dist/ReactToastify.css';  
 
@@ -24,7 +24,7 @@ function App() {
             <Header />
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home/>} />
                 <Route path="/signin" element={<Login />} />
                 <Route path="/signup" element={<Register/>} />
                 <Route
